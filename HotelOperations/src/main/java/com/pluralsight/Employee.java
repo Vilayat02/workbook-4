@@ -12,7 +12,7 @@ public class Employee {
     private double payRate;
     private double hoursWorked;
 
-    private double punchInTime;
+    private LocalTime punchInTime;
     private boolean hasPunchIn = false;
 
 
@@ -78,27 +78,46 @@ public class Employee {
         return regularPay + overTime;
     }
 
-    public void punchIn(double time){
-        if (!hasPunchIn){
-            punchInTime = time;
+    public void punchIn(double time) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        if (!hasPunchIn) {
+            int hours = (int) time;  //14.75  14
+            int minutes = (int) ((time - hours) * 60);
+            //time = hours + minutes;
+            punchInTime = LocalTime.of(hours, minutes);
             hasPunchIn = true;
+            String punchedFormattedTime = punchInTime.format(timeFormatter);
+            System.out.println(name + " punched in at: " + punchedFormattedTime);
         }
-        /*int hours = (int)time;  14.75
-        double minutes = (hours - time) * 0.6;
-        time = (double)hours + minutes;
-        */
+    }
+    public void punchIn(){
+        LocalTime localTime = LocalTime.now();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        String formattedTime = localTime.format(timeFormatter);
+        System.out.println(name + " punched in at: " + formattedTime);
     }
 
-    public void punchOut(double time){
-        if (hasPunchIn){
-            double worked = time - punchInTime;
-            if (worked > 0){
-                hoursWorked += worked;
-                System.out.println("Employee name: " + name + ", punched out at: " + time);
+
+
+        public void punchOut(double time){
+            if (hasPunchIn) {
+
+                if (worked > 0) {
+                    hoursWorked += worked;
+                    System.out.println("Employee name: " + name + ", punched out at: " + time);
+                }
+                hasPunchIn = false;
             }
-            hasPunchIn = false;
         }
-    }
+
+        public String timeFotmatChanger(double time){
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+            int hours = (int) time;
+            int minutes = (int) ((time - hours) * 60);
+            punchInTime = LocalTime.of(hours, minutes);
+            String punchedFormattedTime = punchInTime.format(timeFormatter);
+            return punchedFormattedTime;
+        }
 
 }
 
