@@ -5,53 +5,55 @@ public class Room {
     private double price;
     private boolean occupied;
     private boolean dirty;
-    private boolean Aviable;
 
-    public Room(int numberOfBeds, double price, boolean aviable, boolean dirty, boolean occupied) {
+    public Room(int numberOfBeds, double price, boolean occupied, boolean dirty) {
         this.numberOfBeds = numberOfBeds;
         this.price = price;
-        Aviable = aviable;
-        this.dirty = dirty;
         this.occupied = occupied;
+        this.dirty = dirty;
     }
 
     public int getNumberOfBeds() {
         return numberOfBeds;
     }
 
-    public void setNumberOfBeds(int numberOfBeds) {
-        this.numberOfBeds = numberOfBeds;
-    }
-
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public boolean isOccupied() {
         return occupied;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
-    }
-
     public boolean isDirty() {
         return dirty;
     }
 
-    public void setDirty(boolean dirty) {
-        this.dirty = dirty;
-    }
-
     public boolean isAviable() {
-        return Aviable;
+        return !occupied && !dirty;
     }
 
-    public void setAviable(boolean aviable) {
-        Aviable = aviable;
+    public void checkIn(){
+        if (isOccupied()){
+            occupied = true;
+            dirty = true;
+        }
+        else {
+            System.out.println("Room is not aviable for check-in");
+        }
+    }
+    public void checkOut(){
+        if (occupied){
+            occupied = false;
+            dirty = true;
+        }
+        else {
+            System.out.println("Room is not currently occupied");
+        }
+    }
+    public void cleanRoom(){
+        if(dirty){
+            dirty = false;
+        }
     }
 }

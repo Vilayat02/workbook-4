@@ -70,4 +70,15 @@ public class Employee {
         return regularPay + overTime;
     }
 
+    public double punchIn(double time){
+
+        return time;
+    }
+
+    public double punchOut(double time){
+         
+        return time;
+    }
+
+
 }
