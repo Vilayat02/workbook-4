@@ -1,5 +1,10 @@
 package com.pluralsight;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Employee {
     private int employeeId;
     private String name;
@@ -7,7 +12,8 @@ public class Employee {
     private double payRate;
     private double hoursWorked;
 
-    private double punchinTime;
+    private double punchInTime;
+    private boolean hasPunchIn = false;
 
 
     public Employee(int employeeId, String name, String department, double payRate, double hoursWorked) {
@@ -73,14 +79,26 @@ public class Employee {
     }
 
     public void punchIn(double time){
-        punchinTime = time;
-        System.out.println(name + " came to the work at: " + time);
+        if (!hasPunchIn){
+            punchInTime = time;
+            hasPunchIn = true;
+        }
+        /*int hours = (int)time;  14.75
+        double minutes = (hours - time) * 0.6;
+        time = (double)hours + minutes;
+        */
     }
 
     public void punchOut(double time){
-        double worked = time - punchinTime;
-        hoursWorked += worked;
-        System.out.println(name + " left work at: " + time + ". Worked hours: " + worked);
+        if (hasPunchIn){
+            double worked = time - punchInTime;
+            if (worked > 0){
+                hoursWorked += worked;
+                System.out.println("Employee name: " + name + ", punched out at: " + time);
+            }
+            hasPunchIn = false;
+        }
     }
 
 }
+
