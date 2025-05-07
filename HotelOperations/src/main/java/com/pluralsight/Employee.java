@@ -13,6 +13,7 @@ public class Employee {
     private double hoursWorked;
 
     private LocalTime punchInTime;
+    private double punchInValue;
     private boolean hasPunchIn = false;
 
 
@@ -81,43 +82,53 @@ public class Employee {
     public void punchIn(double time) {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
         if (!hasPunchIn) {
-            int hours = (int) time;  //14.75  14
-            int minutes = (int) ((time - hours) * 60);
-            //time = hours + minutes;
-            punchInTime = LocalTime.of(hours, minutes);
+            punchInValue = time;
+            String punchedFormattedTime = timeFotmatChanger(time);
             hasPunchIn = true;
-            String punchedFormattedTime = punchInTime.format(timeFormatter);
             System.out.println(name + " punched in at: " + punchedFormattedTime);
         }
     }
-    public void punchIn(){
+
+    public void punchIn() {
         LocalTime localTime = LocalTime.now();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
         String formattedTime = localTime.format(timeFormatter);
         System.out.println(name + " punched in at: " + formattedTime);
     }
 
-
-
-        public void punchOut(double time){
-            if (hasPunchIn) {
-
-                if (worked > 0) {
-                    hoursWorked += worked;
-                    System.out.println("Employee name: " + name + ", punched out at: " + time);
-                }
-                hasPunchIn = false;
+    public void punchOut(double time) {
+        if (hasPunchIn) {
+            double worked = time - punchInValue;
+            if (worked > 0) {
+                hoursWorked += worked;
+                String formatted = timeFotmatChanger(time);
+                System.out.printf("Employee : %s, punched out at: %s, worked hours: %.2f\n", name, formatted, worked);
             }
+            else {
+                System.out.println("Punch out earlier than punch in!");
+            }
+            punchInValue = 0;
+            hasPunchIn = false;
         }
+        else {
+            System.out.println("Cannot punch out without punhing in first!");
+        }
+    }
+    public void punchOut(){
+        LocalTime localTime = LocalTime.now();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        String formattedTime = localTime.format(timeFormatter);
+        System.out.println(name + " punched out at: " + formattedTime);
+    }
 
-        public String timeFotmatChanger(double time){
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
-            int hours = (int) time;
-            int minutes = (int) ((time - hours) * 60);
-            punchInTime = LocalTime.of(hours, minutes);
-            String punchedFormattedTime = punchInTime.format(timeFormatter);
-            return punchedFormattedTime;
-        }
+    public String timeFotmatChanger(double time) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        int hours = (int) time;
+        int minutes = (int) ((time - hours) * 60);
+        punchInTime = LocalTime.of(hours, minutes);
+        String punchedFormattedTime = punchInTime.format(timeFormatter);
+        return punchedFormattedTime;
+    }
 
 }
 
